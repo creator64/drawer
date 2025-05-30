@@ -1,0 +1,48 @@
+{
+  "name": "notes",
+  "private": true,
+  "version": "0.0.0",
+  "main": "dist/electron/main.js",
+  "scripts": {
+    "build": "tsc --build",
+    "electron": "npm run build && electron ./dist/main/packages/main/src/main.js",
+    "dev": "npm run build && vite --config packages/renderer/vite.config.ts",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.1.0",
+    "@mui/material": "^7.1.0",
+    "dotenv": "^16.5.0",
+    "electron-reload": "^2.0.0-alpha.1",
+    "lodash": "^4.17.21",
+    "prettier": "^3.5.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tldraw": "^3.13.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "@types/lodash": "^4.17.17",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@typescript-eslint/parser": "^8.32.1",
+    "@vitejs/plugin-react": "^4.4.1",
+    "autoprefixer": "^10.4.21",
+    "electron": "^36.3.1",
+    "eslint": "^9.27.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "vite": "^6.3.5"
+  }
+}
