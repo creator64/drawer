@@ -1,6 +1,7 @@
 import Drawer from './components/drawer';
 import { Explorer } from './components/explorer';
 import './App.css';
+import { DrawingPathProvider } from './context/current-drawing-context';
 
 function App() {
   if (!window.fs)
@@ -11,10 +12,16 @@ function App() {
     );
 
   return (
-    <>
-      {/*<Drawer />*/}
-      <Explorer />
-    </>
+    <DrawingPathProvider>
+      <div className="grid grid-cols-2">
+        <div className="">
+          <Explorer />
+        </div>
+        <div className="h-full">
+          <Drawer />
+        </div>
+      </div>
+    </DrawingPathProvider>
   );
 }
 

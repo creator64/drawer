@@ -30,6 +30,10 @@ ipcMain.handle('fs:read-directory', async (_, dirPath: string): Promise<EDirent[
   return entries.map((entry) => ({ ...entry, isDirectory: entry.isDirectory() }));
 });
 
+ipcMain.handle('fs:read-file', async (_, path: string): Promise<string> => {
+  return await fs.readFile(path, 'utf-8');
+});
+
 ipcMain.handle('path:join', async (_, ...paths: string[]): Promise<string> => {
   return path.join(...paths);
 });
