@@ -34,6 +34,10 @@ ipcMain.handle('fs:read-file', async (_, path: string): Promise<string> => {
   return await fs.readFile(path, 'utf-8');
 });
 
+ipcMain.handle('fs:write-file', async (_, path: string, content: string): Promise<void> => {
+  await fs.writeFile(path, content);
+})
+
 ipcMain.handle('path:join', async (_, ...paths: string[]): Promise<string> => {
   return path.join(...paths);
 });

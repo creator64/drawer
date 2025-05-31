@@ -4,8 +4,6 @@ import { DefaultSpinner, Tldraw, createTLStore, getSnapshot, loadSnapshot } from
 import 'tldraw/tldraw.css';
 import { useDrawingPath } from '../context/current-drawing-context';
 
-const PERSISTENCE_KEY = 'example-3';
-
 export default function Drawer() {
   const store = useMemo(() => createTLStore(), []);
   const { drawingPath } = useDrawingPath();
@@ -17,8 +15,9 @@ export default function Drawer() {
   });
 
   const save = () => {
+    if (drawingPath == undefined) return;
     const snapshot = getSnapshot(store);
-    localStorage.setItem(PERSISTENCE_KEY, JSON.stringify(snapshot)); // TODO: Change
+    window.fs.writeFile(drawingPath, JSON.stringify(snapshot)).catch(() => console.log('error writing file'));
   };
 
   const handlePersistedSnapshot = (persistedSnapshot: string) => {
