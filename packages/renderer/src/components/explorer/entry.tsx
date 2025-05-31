@@ -1,6 +1,6 @@
 import { EDirent } from '@lib/types';
 import { stripFileExtension } from '../../lib/utils/strip-file-extension';
-import BrushIcon from '@mui/icons-material/Brush';
+import DrawIcon from '@mui/icons-material/Draw';
 import FolderIcon from '@mui/icons-material/Folder';
 
 interface ExplorerEntryProps {
@@ -14,7 +14,7 @@ export const ExplorerEntry = ({ dirent, onDirentClick }: ExplorerEntryProps) => 
       className="items-center w-full gap-x-6 max-h-10 flex flex-row"
       onClick={() => onDirentClick(dirent)}
     >
-      {dirent.isDirectory ? <FolderIcon/> : <BrushIcon/>}
+      {dirent.isDirectory ? <FolderIcon/> : <DrawIcon/>}
       <p>{dirent.isDirectory ? dirent.name : stripFileExtension(dirent.name)}</p>
     </div>
   );
