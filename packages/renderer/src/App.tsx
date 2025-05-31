@@ -1,7 +1,7 @@
 import Drawer from './components/drawer';
 import { Explorer } from './components/explorer';
 import './App.css';
-import { DrawingPathProvider } from './context/current-drawing-context';
+import { VaultProvider } from './context/vault-context';
 
 function App() {
   if (!window.fs)
@@ -12,7 +12,7 @@ function App() {
     );
 
   return (
-    <DrawingPathProvider>
+    <VaultProvider>
       <div className="grid h-screen grid-cols-[20%_80%]">
         <div className="overflow-auto">
           <Explorer />
@@ -21,7 +21,7 @@ function App() {
           <Drawer />
         </div>
       </div>
-    </DrawingPathProvider>
+    </VaultProvider>
   );
 }
 

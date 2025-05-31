@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import { EDirent } from '@lib/types';
 import { ExplorerEntry } from './entry';
 import FolderBreadcrumbs from './navigator';
-import { useDrawingPath } from '../../context/current-drawing-context';
+import { useVault } from '../../context/vault-context';
 
 export const Explorer = () => {
   const basePath = import.meta.env.VITE_BASE_PATH;
   const [entries, setEntries] = useState<EDirent[]>([]);
   const [currentPath, setCurrentPath] = useState<EDirent[]>([]);
-  const { setDrawingPath } = useDrawingPath();
+  const vault = useVault();
 
   const handleOnDirentOpen = (dirent: EDirent) => {
     if (dirent.isDirectory) setCurrentPath((currentPath) => [...currentPath, dirent]);
-    else window.path.join(dirent.path, dirent.name).then((fullPath) => setDrawingPath(fullPath));
+    else window.path.join(dirent.path, dirent.name).then((fullPath) => vault.openDrawing(fullPath));
   };
 
   const handleOnDirentNavigate = (dirent: EDirent | 'home', position: number) => {
