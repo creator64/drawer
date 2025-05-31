@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc --build",
     "electron": "npm run build && electron ./dist/main/packages/main/src/main.js",
+    "electron:ubuntu": "npm run build && electron ./dist/main/packages/main/src/main.js --no-sandbox",
     "dev": "npm run build && vite --config packages/renderer/vite.config.ts",
     "lint": "eslint .",
     "preview": "vite preview",
