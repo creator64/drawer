@@ -19,7 +19,7 @@ export class InvalidDrawing extends Drawing {
   readonly error?: string;
 
   constructor(reason: InvalidDrawingReason = InvalidDrawingReason.UNKNOWN_REASON, error?: string) {
-    super("", "", {});
+    super('', '', {});
     this.reason = reason;
     this.error = error;
   }
@@ -32,5 +32,5 @@ export class InvalidDrawing extends Drawing {
 export enum InvalidDrawingReason {
   UNKNOWN_REASON = 'failed to open drawing',
   JSON_PARSE_ERROR = 'parsing json yielded the following error',
-  INCORRECT_SIGNATURE = 'could not open drawing because of an incorrect signature'
+  INCORRECT_FORMAT = 'drawing does not have the correct format',
 }

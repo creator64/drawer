@@ -43,8 +43,8 @@ export class Vault {
           );
         }
 
-        if (drawing['SIGNATURE_KEY'] !== import.meta.env.VITE_VAULT_SIGNATURE)
-          return this.setDrawing(new InvalidDrawing(InvalidDrawingReason.INCORRECT_SIGNATURE));
+        if (drawing['FORMAT_KEY'] !== import.meta.env.VITE_FORMAT_KEY)
+          return this.setDrawing(new InvalidDrawing(InvalidDrawingReason.INCORRECT_FORMAT));
 
         return this.setDrawing(new Drawing(drawing['NAME'], drawingPath, drawing['SNAPSHOT']));
       })
@@ -56,10 +56,10 @@ export class Vault {
   saveDrawing = async (drawing: Drawing, snapshot: object): Promise<void> => {
     if (!drawing.isValid()) return;
 
-    const signature = import.meta.env.VITE_VAULT_SIGNATURE;
+    const format_key = import.meta.env.VITE_FORMAT_KEY;
     const content = JSON.stringify({
       NAME: drawing.name,
-      SIGNATURE_KEY: signature,
+      FORMAT_KEY: format_key,
       SNAPSHOT: snapshot,
     });
 
