@@ -1,5 +1,7 @@
 import { EDirent } from '@lib/types';
-import folderIcon from '../../assets/folder-solid.svg';
+import { stripFileExtension } from '../../lib/utils/strip-file-extension';
+import BrushIcon from '@mui/icons-material/Brush';
+import FolderIcon from '@mui/icons-material/Folder';
 
 interface ExplorerEntryProps {
   dirent: EDirent;
@@ -12,8 +14,8 @@ export const ExplorerEntry = ({ dirent, onDirentClick }: ExplorerEntryProps) => 
       className="items-center w-full gap-x-6 max-h-10 flex flex-row"
       onClick={() => onDirentClick(dirent)}
     >
-      <img className={`${dirent.isDirectory ? '' : 'invisible'} h-8 w-8`} src={folderIcon} alt="" />
-      <p>{dirent.name}</p>
+      {dirent.isDirectory ? <FolderIcon/> : <BrushIcon/>}
+      <p>{dirent.isDirectory ? dirent.name : stripFileExtension(dirent.name)}</p>
     </div>
   );
 };
