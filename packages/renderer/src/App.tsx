@@ -13,8 +13,8 @@ function App() {
 
   return (
     <DrawingPathProvider>
-      <div className="grid grid-cols-2">
-        <div className="">
+      <div className="grid h-screen grid-cols-[20%_80%]">
+        <div className="overflow-auto">
           <Explorer />
         </div>
         <div className="h-full">
