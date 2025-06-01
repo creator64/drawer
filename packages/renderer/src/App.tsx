@@ -1,7 +1,7 @@
-import Drawer from './components/drawer';
 import { Explorer } from './components/explorer';
 import './App.css';
-import { VaultProvider } from './context/vault-context';
+import { useDrawingPath } from './context/drawing-path-context';
+import { Drawer } from './components/drawer';
 
 function App() {
   if (!window.fs)
@@ -10,18 +10,21 @@ function App() {
         Deze applicatie wordt niet ondersteund in de browser
       </div>
     );
+  const { drawingPath } = useDrawingPath();
 
   return (
-    <VaultProvider>
-      <div className="grid h-screen grid-cols-[20%_80%]">
-        <div className="overflow-auto">
-          <Explorer />
-        </div>
-        <div className="h-full">
-          <Drawer />
-        </div>
+    <div className="grid h-screen grid-cols-[20%_80%]">
+      <div className="overflow-auto">
+        <Explorer />
       </div>
-    </VaultProvider>
+      <div className="h-full">
+        {drawingPath == undefined ? (
+          <div>Kies een drawing</div>
+        ) : (
+          <Drawer drawingPath={drawingPath} />
+        )}
+      </div>
+    </div>
   );
 }
 

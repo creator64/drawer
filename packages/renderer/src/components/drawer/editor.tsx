@@ -2,13 +2,12 @@ import { throttle } from 'lodash';
 import { useLayoutEffect, useMemo, useState } from 'react';
 import { DefaultSpinner, Tldraw, createTLStore, getSnapshot, loadSnapshot } from 'tldraw';
 import 'tldraw/tldraw.css';
-import { Drawing, InvalidDrawing } from '../lib/vault/types';
-import { useVault } from '../context/vault-context';
+import { Drawing, InvalidDrawing } from '../../lib/vault/types';
+import { Vault } from '../../lib/vault';
 
-export default function Drawer() {
+export default function Editor({ drawing }: { drawing: Drawing }) {
   const store = useMemo(() => createTLStore(), []);
-  const [drawing, setDrawing] = useState<Drawing | null>(null);
-  const vault = useVault();
+  const vault = new Vault();
 
   const [loadingState, setLoadingState] = useState<
     { status: 'loading' } | { status: 'ready' } | { status: 'error'; error: string }
@@ -32,19 +31,30 @@ export default function Drawer() {
         setLoadingState({ status: 'error', error: error.message }); // Something went wrong
       }
     }
-    setDrawing(drawing);
+    // setDrawing(drawing);
     setLoadingState({ status: 'ready' });
   };
 
   useLayoutEffect(() => {
-    const unsubscribe = vault.subscribe(onOpenDrawing);
+    setLoadingState({ status: 'loading' });
+    if (drawing.isValid()) {
+      try {
+        loadSnapshot(store, drawing.snapshot);
+      } catch (error: any) {
+        setLoadingState({ status: 'error', error: error.message }); // Something went wrong
+      }
+    }
+    // setDrawing(drawing);
+    // const unsubscribe = vault.subscribe(onOpenDrawing);
     const cleanupFn = store.listen(throttle(save, 500));
 
+    setLoadingState({ status: 'ready' });
+
     return () => {
-      unsubscribe();
+      // unsubscribe();
       cleanupFn();
     };
-  }, [store, vault]);
+  }, [store, drawing]);
 
   // useLayoutEffect(() => {
   //   setLoadingState({ status: 'loading' });
