@@ -1,29 +1,5 @@
 import { Drawing, InvalidDrawing, InvalidDrawingReason } from './types';
-
 export class Vault {
-  // drawing: Drawing | null;
-  // subscribers: ((drawing: Drawing | null) => void)[] = [];
-  //
-  // constructor() {
-  //   this.drawing = null;
-  // }
-  //
-  // subscribe = (callback: (drawing: Drawing | null) => void) => {
-  //   this.subscribers.push(callback);
-  //   return () => {
-  //     this.subscribers = this.subscribers.filter((cb) => cb !== callback);
-  //   };
-  // };
-  //
-  // private notify = () => {
-  //   this.subscribers.forEach((callback) => callback(this.drawing));
-  // };
-  //
-  // private setDrawing = (drawing: Drawing | null) => {
-  //   this.drawing = drawing;
-  //   this.notify();
-  // };
-
   openDrawing = async (drawingPath: string): Promise<Drawing> => {
     return window.fs
       .readFile(drawingPath)
