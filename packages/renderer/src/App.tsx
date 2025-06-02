@@ -21,7 +21,7 @@ function App() {
         {drawingPath == undefined ? (
           <div>Kies een drawing</div>
         ) : (
-          <Drawer drawingPath={drawingPath} />
+          <Drawer drawingPath={drawingPath} key={drawingPath} />
         )}
       </div>
     </div>
