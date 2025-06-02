@@ -16,7 +16,6 @@ export default function Editor({ drawing }: { drawing: Drawing }) {
   });
 
   const save = () => {
-    if (drawing == null) return;
     const snapshot = getSnapshot(store);
     vault.saveDrawing(drawing, snapshot).catch((e) => console.error(e)); // TODO: Error handling
   };
@@ -35,7 +34,6 @@ export default function Editor({ drawing }: { drawing: Drawing }) {
     setLoadingState({ status: 'ready' });
 
     return () => {
-      save();
       cleanupFn();
     };
   }, [store, drawing]);
