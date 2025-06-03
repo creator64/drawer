@@ -5,12 +5,16 @@ import FolderBreadcrumbs from './folder-breadcrumbs';
 import { useDrawingPath } from '../../context/drawing-path-context';
 import { AddButtons } from './add-buttons';
 import { Vault } from '../../lib/vault';
+import { Box, IconButton } from '@mui/material';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 export const Explorer = () => {
   const basePath = import.meta.env.VITE_BASE_PATH;
   const [entries, setEntries] = useState<EDirent[]>([]);
   const [currentPath, setCurrentPath] = useState<EDirent[]>([]);
   const { setDrawingPath } = useDrawingPath();
+  const [isOpen, setIsOpen] = useState(true);
   const vault = new Vault();
 
   const handleOnDirentOpen = (dirent: EDirent) => {
@@ -63,23 +67,62 @@ export const Explorer = () => {
           });
       });
   };
-
+  // TODO: Hier verder gaan met collapsen fixen
   return (
-    <div className="explorer sidebar">
-      {currentPath.length > 0 && (
-        <FolderBreadcrumbs
-          className="mb-4"
-          currentPath={currentPath}
-          onDirentClick={handleOnDirentNavigate}
-        />
-      )}
-      <div className="explorer toolbar">
-        <p style={{ color: 'hsl(204, 4%, 75%)' }}>Drawings</p>
-        <AddButtons onAdd={handleOnAddDirent} />
+    <Box
+      sx={{
+        position: 'relative',
+        height: '100%',
+        transition: 'width 0.5s ease-in-out',
+        width: isOpen ? '100%' : '12px',
+        backgroundColor: 'hsl(0, 0%, 10%)',
+        borderRight: '1px solid hsl(0, 0%, 20%)',
+      }}
+    >
+      <IconButton
+        onClick={() => setIsOpen(!isOpen)}
+        sx={{
+          position: 'absolute',
+          right: '-16px',
+          top: '8px',
+          zIndex: 1,
+          color: 'hsl(0, 0%, 70%)',
+          bgcolor: 'hsl(0, 0%, 10%)',
+          border: '1px solid hsl(0, 0%, 20%)',
+          '&:hover': {
+            bgcolor: 'hsl(0, 0%, 15%)',
+          },
+        }}
+      >
+        {isOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+      </IconButton>
+
+      <div className="explorer sidebar">
+        <Box
+          sx={{
+            opacity: isOpen ? 1 : 0,
+            transition: 'opacity 0.2s ease',
+            visibility: isOpen ? 'visible' : 'hidden',
+            height: '100%',
+            overflow: 'auto',
+          }}
+        >
+          {currentPath.length > 0 && (
+            <FolderBreadcrumbs
+              className="mb-4"
+              currentPath={currentPath}
+              onDirentClick={handleOnDirentNavigate}
+            />
+          )}
+          <div className="explorer toolbar">
+            <p style={{ color: 'hsl(204, 4%, 75%)' }}>Drawings</p>
+            <AddButtons onAdd={handleOnAddDirent} />
+          </div>
+          {entries.map((e, index) => (
+            <ExplorerEntry dirent={e} onDirentClick={handleOnDirentOpen} key={index} />
+          ))}
+        </Box>
       </div>
-      {entries.map((e, index) => (
-        <ExplorerEntry dirent={e} onDirentClick={handleOnDirentOpen} key={index} />
-      ))}
-    </div>
+    </Box>
   );
 };
