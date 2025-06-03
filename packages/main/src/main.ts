@@ -36,7 +36,11 @@ ipcMain.handle('fs:read-file', async (_, path: string): Promise<string> => {
 
 ipcMain.handle('fs:write-file', async (_, path: string, content: string): Promise<void> => {
   await fs.writeFile(path, content);
-})
+});
+
+ipcMain.handle('fs:create-directory', async (_, dirPath: string): Promise<void> => {
+  await fs.mkdir(dirPath);
+});
 
 ipcMain.handle('path:join', async (_, ...paths: string[]): Promise<string> => {
   return path.join(...paths);

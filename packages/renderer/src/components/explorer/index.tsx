@@ -21,7 +21,7 @@ export const Explorer = () => {
     else setCurrentPath((currentPath) => currentPath.slice(0, position));
   };
 
-  useEffect(() => {
+  const loadEntries = () => {
     window.path.join(basePath, ...currentPath.map((e) => e.name)).then((result) =>
       window.fs
         .readDirectory(result)
@@ -37,7 +37,16 @@ export const Explorer = () => {
           // TODO: Error handling
         })
     );
-  }, [currentPath]);
+  };
+
+  useEffect(loadEntries, [currentPath]);
+
+  const handleOnAddDirent = (type: 'file' | 'directory', name: string) => {
+    if (type == 'directory')
+      window.path.join(basePath, ...currentPath.map((e) => e.name), name).then((result) => {
+        window.fs.createDirectory(result).then(loadEntries);
+      });
+  };
 
   return (
     <div className="explorer sidebar">
@@ -50,7 +59,7 @@ export const Explorer = () => {
       )}
       <div className="explorer toolbar">
         <p style={{ color: 'hsl(204, 4%, 75%)' }}>Drawings</p>
-        <AddButtons />
+        <AddButtons onAdd={handleOnAddDirent} />
       </div>
       {entries.map((e, index) => (
         <ExplorerEntry dirent={e} onDirentClick={handleOnDirentOpen} key={index} />

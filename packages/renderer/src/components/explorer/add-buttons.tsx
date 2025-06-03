@@ -4,7 +4,11 @@ import AddIcon from '@mui/icons-material/Add';
 import { Button, ButtonGroup } from '@mui/material';
 import { CreateDialog } from './create-entry-dialog';
 
-export const AddButtons = () => {
+export const AddButtons = ({
+  onAdd,
+}: {
+  onAdd: (type: 'file' | 'directory', name: string) => void;
+}) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogType, setDialogType] = useState<'file' | 'directory'>('file');
 
@@ -23,8 +27,7 @@ export const AddButtons = () => {
   }, [handleKeyPress]);
 
   const handleCreate = (name: string) => {
-    // TODO: Implement file/directory creation logic
-    console.log(`Creating ${dialogType}:`, name);
+    onAdd(dialogType, name);
   };
 
   const newDirectory = () => {
