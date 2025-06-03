@@ -3,9 +3,7 @@ import { EDirent } from '@lib/types';
 import { ExplorerEntry } from './entry';
 import FolderBreadcrumbs from './folder-breadcrumbs';
 import { useDrawingPath } from '../../context/drawing-path-context';
-import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
-import AddIcon from '@mui/icons-material/Add';
-import { Button, ButtonGroup } from '@mui/material';
+import { AddButtons } from './add-buttons';
 
 export const Explorer = () => {
   const basePath = import.meta.env.VITE_BASE_PATH;
@@ -43,26 +41,16 @@ export const Explorer = () => {
 
   return (
     <div className="explorer sidebar">
-      {currentPath.length > 0 ? (
+      {currentPath.length > 0 && (
         <FolderBreadcrumbs
           className="mb-4"
           currentPath={currentPath}
           onDirentClick={handleOnDirentNavigate}
         />
-      ) : (
-        <p className="mb-4">{basePath}</p>
       )}
-      <div className="flex w-full justify-between flex-row items-center">
+      <div className="explorer toolbar">
         <p style={{ color: 'hsl(204, 4%, 75%)' }}>Drawings</p>
-        {/*// @ts-ignore*/}
-        <ButtonGroup color={'#FFFFFF'} variant={'text'}>
-          <Button>
-            <CreateNewFolderIcon />
-          </Button>
-          <Button>
-            <AddIcon />
-          </Button>
-        </ButtonGroup>
+        <AddButtons />
       </div>
       {entries.map((e, index) => (
         <ExplorerEntry dirent={e} onDirentClick={handleOnDirentOpen} key={index} />
