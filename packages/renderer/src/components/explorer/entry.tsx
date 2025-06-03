@@ -9,13 +9,17 @@ interface ExplorerEntryProps {
 }
 
 export const ExplorerEntry = ({ dirent, onDirentClick }: ExplorerEntryProps) => {
+  const iconSize = '1.9rem';
   return (
-    <div
-      className="items-center w-full gap-x-6 max-h-10 flex flex-row"
-      onClick={() => onDirentClick(dirent)}
-    >
-      {dirent.isDirectory ? <FolderIcon/> : <DrawIcon/>}
-      <p>{dirent.isDirectory ? dirent.name : stripFileExtension(dirent.name)}</p>
+    <div className="explorer entry" onClick={() => onDirentClick(dirent)}>
+      {dirent.isDirectory ? (
+        <FolderIcon style={{ fontSize: iconSize }} />
+      ) : (
+        <DrawIcon style={{ fontSize: iconSize }} />
+      )}
+      <p className="truncate">
+        {dirent.isDirectory ? dirent.name : stripFileExtension(dirent.name)}
+      </p>
     </div>
   );
 };
