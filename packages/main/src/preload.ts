@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld('fs', {
   readFile: (path: string) => ipcRenderer.invoke('fs:read-file', path),
   writeFile: (path: string, content: string) => ipcRenderer.invoke('fs:write-file', path, content),
   createDirectory: (dirPath: string) => ipcRenderer.invoke('fs:create-directory', dirPath),
+  exists: (path: string) => ipcRenderer.invoke('fs:exists', path),
 });
 
 contextBridge.exposeInMainWorld('path', {

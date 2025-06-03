@@ -5,6 +5,8 @@ export interface fsApi {
   readFile: (path: string) => Promise<string>;
   writeFile: (path: string, content: string) => Promise<void>;
   createDirectory: (dirPath: string) => Promise<void>;
+  createFile: (path: string) => Promise<void>;
+  exists: (path: string) => Promise<boolean>;
 }
 
 export interface pathApi {

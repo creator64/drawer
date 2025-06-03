@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
-import * as fs from 'fs/promises';
+import * as fsp from 'fs/promises';
+import * as fs from 'fs';
 import 'electron-reload';
 import 'dotenv/config';
 import { EDirent } from '@lib/types';
@@ -26,20 +27,24 @@ const createWindow = () => {
 
 // IPC to expose fs
 ipcMain.handle('fs:read-directory', async (_, dirPath: string): Promise<EDirent[]> => {
-  const entries = await fs.readdir(dirPath, { withFileTypes: true });
+  const entries = await fsp.readdir(dirPath, { withFileTypes: true });
   return entries.map((entry) => ({ ...entry, isDirectory: entry.isDirectory() }));
 });
 
 ipcMain.handle('fs:read-file', async (_, path: string): Promise<string> => {
-  return await fs.readFile(path, 'utf-8');
+  return await fsp.readFile(path, 'utf-8');
 });
 
 ipcMain.handle('fs:write-file', async (_, path: string, content: string): Promise<void> => {
-  await fs.writeFile(path, content);
+  await fsp.writeFile(path, content);
 });
 
 ipcMain.handle('fs:create-directory', async (_, dirPath: string): Promise<void> => {
-  await fs.mkdir(dirPath);
+  await fsp.mkdir(dirPath);
+});
+
+ipcMain.handle('fs:exists', async (_, path: string): Promise<boolean> => {
+  return fs.existsSync(path);
 });
 
 ipcMain.handle('path:join', async (_, ...paths: string[]): Promise<string> => {

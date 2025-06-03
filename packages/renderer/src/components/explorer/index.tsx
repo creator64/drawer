@@ -4,12 +4,14 @@ import { ExplorerEntry } from './entry';
 import FolderBreadcrumbs from './folder-breadcrumbs';
 import { useDrawingPath } from '../../context/drawing-path-context';
 import { AddButtons } from './add-buttons';
+import { Vault } from '../../lib/vault';
 
 export const Explorer = () => {
   const basePath = import.meta.env.VITE_BASE_PATH;
   const [entries, setEntries] = useState<EDirent[]>([]);
   const [currentPath, setCurrentPath] = useState<EDirent[]>([]);
   const { setDrawingPath } = useDrawingPath();
+  const vault = new Vault();
 
   const handleOnDirentOpen = (dirent: EDirent) => {
     if (dirent.isDirectory) setCurrentPath((currentPath) => [...currentPath, dirent]);
@@ -44,7 +46,21 @@ export const Explorer = () => {
   const handleOnAddDirent = (type: 'file' | 'directory', name: string) => {
     if (type == 'directory')
       window.path.join(basePath, ...currentPath.map((e) => e.name), name).then((result) => {
-        window.fs.createDirectory(result).then(loadEntries);
+        window.fs
+          .createDirectory(result)
+          .then(loadEntries)
+          .catch(() => {
+            // TODO: Error handling
+          });
+      });
+    if (type == 'file')
+      window.path.join(basePath, ...currentPath.map((e) => e.name)).then((result) => {
+        vault
+          .createDrawing(result, name)
+          .then(loadEntries)
+          .catch((e) => {
+            console.error(e); // TODO: Error handling
+          });
       });
   };
 
