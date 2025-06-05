@@ -1,13 +1,28 @@
 import { throttle } from 'lodash';
 import { useLayoutEffect, useMemo, useState } from 'react';
-import { DefaultSpinner, Tldraw, createTLStore, getSnapshot, loadSnapshot } from 'tldraw';
+import {
+  DefaultSpinner,
+  Tldraw,
+  createTLStore,
+  getSnapshot,
+  loadSnapshot,
+  TldrawUiMenuItem,
+  DefaultMainMenu,
+  TldrawUiMenuGroup,
+  DefaultMainMenuContent,
+  TLUiActionsContextType,
+  TLUiOverrides,
+  TLUiActionItem,
+} from 'tldraw';
 import 'tldraw/tldraw.css';
 import { Drawing, InvalidDrawing } from '../../lib/vault/types';
 import { Vault } from '../../lib/vault';
+import { useExplorerOpen } from '../../context/explorer-open-context';
 
 export default function Editor({ drawing }: { drawing: Drawing }) {
   const store = useMemo(() => createTLStore(), []);
   const vault = new Vault();
+  const { explorerOpen, setExplorerOpen } = useExplorerOpen();
 
   const [loadingState, setLoadingState] = useState<
     { status: 'loading' } | { status: 'ready' } | { status: 'error'; error: string }
@@ -38,6 +53,43 @@ export default function Editor({ drawing }: { drawing: Drawing }) {
     };
   }, [store, drawing]);
 
+  const CustomMainMenu = () => {
+    return (
+      <DefaultMainMenu>
+        <div>
+          <TldrawUiMenuGroup id="example">
+            <TldrawUiMenuItem
+              id="toggle-explorer"
+              label={`${explorerOpen ? 'Close' : 'Open'} Explorer`}
+              readonlyOk
+              onSelect={() => setExplorerOpen((explorerOpen) => !explorerOpen)}
+            />
+          </TldrawUiMenuGroup>
+        </div>
+        <DefaultMainMenuContent />
+      </DefaultMainMenu>
+    );
+  };
+
+  const overrides: TLUiOverrides = {
+    actions: (_editor, actions) => {
+      const toggleExplorer: TLUiActionItem = {
+        id: 'toggle-explorer',
+        kbd: '$e',
+        onSelect() {
+          setExplorerOpen((explorerOpen) => !explorerOpen);
+        },
+      };
+
+      const newActions: TLUiActionsContextType = {
+        ...actions,
+        'toggle-explorer': toggleExplorer,
+      };
+
+      return newActions;
+    },
+  };
+
   if (loadingState.status === 'loading') {
     return (
       <div className="tldraw__editor">
@@ -67,5 +119,5 @@ export default function Editor({ drawing }: { drawing: Drawing }) {
     );
   }
 
-  return <Tldraw store={store} />;
+  return <Tldraw store={store} overrides={overrides} components={{ MainMenu: CustomMainMenu }} />;
 }
